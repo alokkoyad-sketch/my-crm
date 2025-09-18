@@ -1,6 +1,5 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',  // ✅ full Node.js server build ke liye
+  output: 'standalone',
 };
 
 export default nextConfig;
