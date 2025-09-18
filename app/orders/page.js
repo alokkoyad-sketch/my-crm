@@ -105,37 +105,48 @@ export default function OrdersPage() {
     setIsModalOpen(false);
   };
 
-  // 📌 Fetch Post Office, City, State from PIN
-  const fetchPostOffices = async (pincode) => {
-    try {
-      const res = await fetch(
-        `https://api.postalpincode.in/pincode/${pincode}`
-      );
-      const data = await res.json();
-      if (data[0]?.Status === "Success") {
-        const list = data[0].PostOffice.map((po) => ({
-          name: po.Name,
-          district: po.District,
-          state: po.State,
-        }));
-        setPostOffices(list);
+ // ✅ Updated Fetch Post Office, City, State from PIN
+const fetchPostOffices = async (pincode) => {
+  try {
+    if (!pincode || pincode.length !== 6) return;
 
-        // Auto-fill city & state
-        if (list.length > 0) {
-          setForm((f) => ({
-            ...f,
-            postOffice: list[0].name,
-            city: list[0].district,
-            state: list[0].state,
-          }));
-        }
-      } else {
-        setPostOffices([]);
-      }
-    } catch (err) {
-      console.error("Error fetching Post Offices:", err);
+    // ✅ Direct external API fetch
+    const res = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch API");
     }
-  };
+
+    const data = await res.json();
+
+    if (data[0]?.Status === "Success") {
+      const list = data[0].PostOffice.map((po) => ({
+        name: po.Name,
+        district: po.District,
+        state: po.State,
+      }));
+      setPostOffices(list);
+
+      // Auto-fill city & state
+      if (list.length > 0) {
+        setForm((f) => ({
+          ...f,
+          postOffice: list[0].name,
+          city: list[0].district,
+          state: list[0].state,
+        }));
+      }
+    } else {
+      setPostOffices([]);
+      alert("❌ Invalid PIN Code");
+    }
+  } catch (err) {
+    console.error("Error fetching Post Offices:", err);
+    alert("⚠️ PIN Code fetch nahi ho pa raha. Thodi der baad try karein.");
+  }
+};
+
+
 
   // 📌 Filtered Orders (Frontend Filtering)
   const filteredOrders = orders.filter((o) => {
@@ -173,14 +184,12 @@ export default function OrdersPage() {
         </button>
       </div>
 
-
-
       {/* 🔍 Filters Section */}
       <div className="grid grid-cols-4 gap-2 mb-4 text-black">
         <select
           value={filters.status}
           onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-  className="p-0.5 border border-black-300 rounded bg-white"
+          className="p-0.5 border border-black-300 rounded bg-white"
         >
           <option value="">Status</option>
           <option>Untouched</option>
@@ -201,7 +210,7 @@ export default function OrdersPage() {
           onChange={(e) =>
             setFilters({ ...filters, shiprocketStatus: e.target.value })
           }
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         >
           <option value="">ShipRocket Status</option>
           {shiprocketStatuses.map((s) => (
@@ -213,70 +222,70 @@ export default function OrdersPage() {
           placeholder="Agent"
           value={filters.agent}
           onChange={(e) => setFilters({ ...filters, agent: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           type="date"
           value={filters.fromDate}
           onChange={(e) => setFilters({ ...filters, fromDate: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           type="date"
           value={filters.toDate}
           onChange={(e) => setFilters({ ...filters, toDate: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           placeholder="Domain"
           value={filters.domain}
           onChange={(e) => setFilters({ ...filters, domain: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           placeholder="Product"
           value={filters.product}
           onChange={(e) => setFilters({ ...filters, product: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           placeholder="Course"
           value={filters.course}
           onChange={(e) => setFilters({ ...filters, course: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           placeholder="Courier"
           value={filters.courier}
           onChange={(e) => setFilters({ ...filters, courier: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           placeholder="Order No."
           value={filters.orderNo}
           onChange={(e) => setFilters({ ...filters, orderNo: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           placeholder="Mobile No."
           value={filters.mobile}
           onChange={(e) => setFilters({ ...filters, mobile: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
 
         <input
           placeholder="Customer"
           value={filters.customer}
           onChange={(e) => setFilters({ ...filters, customer: e.target.value })}
-  className="p-2 border border-black-300 rounded bg-white"
+          className="p-2 border border-black-300 rounded bg-white"
         />
       </div>
 
@@ -361,16 +370,14 @@ export default function OrdersPage() {
                 <option>Blue Dart</option>
                 <option>India Post</option>
               </select>
-                 <select
-                value={form.courier || ""}
-                onChange={(e) => setForm({ ...form, courier: e.target.value })}
+              <select
+                value={form.mode || ""}
+                onChange={(e) => setForm({ ...form, mode: e.target.value })}
                 className="p-2 rounded bg-white"
               >
-                <option value="">Mode </option>
-                <option>Phone </option>
+                <option value="">Mode</option>
+                <option>Phone</option>
                 <option>Online</option>
-
-          
               </select>
               <input
                 value={form.phone || ""}
@@ -379,38 +386,34 @@ export default function OrdersPage() {
                 className="p-2 rounded bg-white"
               />
               <input
-  value={form.altPhone || ""}
-  onChange={(e) => setForm({ ...form, altPhone: e.target.value })}
-  placeholder="Alternate Mobile"
-  className="p-2 rounded bg-white"
-/>
-
+                value={form.altPhone || ""}
+                onChange={(e) => setForm({ ...form, altPhone: e.target.value })}
+                placeholder="Alternate Mobile"
+                className="p-2 rounded bg-white"
+              />
               <input
                 value={form.name || ""}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="Customer Name"
                 className="p-2 rounded bg-white"
               />
-             <select
-                value={form.courier || ""}
-                onChange={(e) => setForm({ ...form, courier: e.target.value })}
-                className="p-2 rounded bg-white"   >
-                <option value="">Product </option>
-                <option>Male Extra </option>
-                <option>The Ultra Fire</option>
-          
-              </select>
               <select
-                value={form.courier || ""}
-                onChange={(e) => setForm({ ...form, courier: e.target.value })}
+                value={form.product || ""}
+                onChange={(e) => setForm({ ...form, product: e.target.value })}
                 className="p-2 rounded bg-white"
               >
-                <option value="">Course </option>
-                <option>One Month  </option>
-                <option>Two Month  </option>
-              
-
-          
+                <option value="">Product</option>
+                <option>Male Extra</option>
+                <option>The Ultra Fire</option>
+              </select>
+              <select
+                value={form.course || ""}
+                onChange={(e) => setForm({ ...form, course: e.target.value })}
+                className="p-2 rounded bg-white"
+              >
+                <option value="">Course</option>
+                <option>One Month</option>
+                <option>Two Month</option>
               </select>
               <input
                 value={form.price || ""}
@@ -466,13 +469,12 @@ export default function OrdersPage() {
                 placeholder="State (auto)"
                 className="p-2 rounded bg-white"
               />
-          
               <select
                 value={form.status || ""}
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
                 className="p-2 rounded bg-white"
               >
-                <option value="">Status </option>
+                <option value="">Status</option>
                 <option>Untouched</option>
                 <option>In Process</option>
                 <option>Callback</option>
