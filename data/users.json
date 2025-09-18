@@ -1,0 +1,33 @@
+[
+  {
+    "id": "u-admin",
+    "username": "admin",
+    "role": "Admin",
+    "salt": "697323cf1a8ee034c04b226fde2f9b2f",
+    "hash": "2895f295df2b751ef3c26980dd91a884e66eb394621f362a0945205ff46a29b6",
+    "permissions": [
+      "*"
+    ],
+    "createdAt": "2025-09-17T08:20:43.428Z"
+  },
+  {
+    "id": "u-Vinod-mfnpq6ln",
+    "username": "Vinod",
+    "role": "Agent",
+    "salt": "78a494cf32f8d7371d1f988e96c67983",
+    "hash": "834e5251cff9994223bc825b933fff2c8bf5189f7d2deb6861327a1ffe5e53fa",
+    "permissions": [],
+    "createdAt": "2025-09-17T08:21:19.936Z"
+  },
+  {
+    "id": "u-Vinod singh -mfnpws3i",
+    "username": "Vinod singh ",
+    "role": "Tracker",
+    "salt": "d0c29696d8942f2c81ced6f131f8a37e",
+    "hash": "4097d56f96768d4b38021d2269e7873d0e12acba334a2c619cbba2a25f923f90",
+    "permissions": [
+      "products"
+    ],
+    "createdAt": "2025-09-17T08:26:27.697Z"
+  }
+]
