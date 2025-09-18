@@ -10,6 +10,7 @@ export default function Sidebar() {
     { href: "/orders", label: "Orders" },
     { href: "/track", label: "Track Order" },
     { href: "/assign", label: "Assign Form" },
+     { href: "/dashboard", label: "leads" },
   ];
 
   return (
